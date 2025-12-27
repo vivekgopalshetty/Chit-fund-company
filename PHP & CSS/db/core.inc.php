@@ -2,6 +2,7 @@
 
 ob_start();
 session_start();
+require 'conn.inc.php';
 $current_file = $_SERVER['SCRIPT_NAME'];
 
 function loggedin(){
@@ -14,12 +15,13 @@ function loggedin(){
 }
 
 function userlevel($exp){
-  require 'conn.inc.php';
+  global $connection;
   $user = $_SESSION['user_id'];
-  $query = "SELECT `user_level` FROM `user_master` WHERE `user_id`='$user'";
-  if($query_result = mysql_query($query)){
-    if(mysql_num_rows($query_result) == 1){
-      $level = mysql_result($query_result, 0, 'user_level');
+  $query = "SELECT `user_level` FROM `user_master` WHERE `user_id`='" . $connection->real_escape_string($user) . "'";
+  if($query_result = $connection->query($query)){
+    if($query_result->num_rows == 1){
+      $row = $query_result->fetch_assoc();
+      $level = $row['user_level'];
       if($level == $exp){
         //echo 'Yes';
         return True;

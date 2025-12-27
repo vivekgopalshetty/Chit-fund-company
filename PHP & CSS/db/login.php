@@ -41,19 +41,20 @@ if ($_SERVER["REQUEST_METHOD"]=="POST")
     if(!empty($user) && !empty($pass))
     {
       $pass_hash = md5($pass);
-      $query = "SELECT user_id, user_level FROM user_master WHERE user_id='$user' AND user_password='$pass_hash'" ;
+      $query = "SELECT user_id, user_level FROM user_master WHERE user_id='" . $connection->real_escape_string($user) . "' AND user_password='$pass_hash'" ;
 
-      if($query_run = mysql_query($query))
+      if($query_run = $connection->query($query))
       {
-        $num = mysql_num_rows($query_run);
+        $num = $query_run->num_rows;
         if($num == 0)
         {
           echo '<div class="error-handle error-1">Invalid User ID & Password Combination</div>';
         }
         else if ($num == 1)
         {
-          $user_id = mysql_result($query_run, 0, 'user_id');
-          $user_level = mysql_result($query_run, 0, 'user_level');
+          $row = $query_run->fetch_assoc();
+          $user_id = $row['user_id'];
+          $user_level = $row['user_level'];
           $_SESSION['user_id'] = $user_id;
           $_SESSION['user_level'] = $user_level;
           header('Location: index.php');
