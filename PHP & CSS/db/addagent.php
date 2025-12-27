@@ -74,20 +74,20 @@ function showtable() {
     if(!empty($id) && !empty($addr)){
 
       $query = "SELECT * from staff_master where user_id='$id'";
-      $result = mysql_query($query);
-      $name = mysql_result($result, 0, 'staff_name'); 
-      $dob = mysql_result($result, 0, 'date_of_birth'); 
-      $sex = mysql_result($result, 0, 'sex'); 
+      $result = $connection->query($query);
+      $name = result_get($result,0,'staff_name'); 
+      $dob = result_get($result,0,'date_of_birth'); 
+      $sex = result_get($result,0,'sex'); 
 
       $query = "SELECT * from agent_master where name='$name' and address='$addr' and date_of_birth='$dob'";
-      $result = mysql_query($query);
+      $result = $connection->query($query);
 
-      if(mysql_num_rows($result)>=1){
+      if(($result)->num_rows>=1){
         echo '<div class="error-handle error-5">Agent Already Exists</div>';
       }else{
 
       $query = "INSERT INTO `agent_master`( `name`, `address`, `sex`, `date_of_birth`, `agent_active`) VALUES ('$name', '$addr', '$sex', '$dob', '1')";
-      if($result = mysql_query($query)){
+      if($result = $connection->query($query)){
         echo '<div class="success-handle success-4">Successfully Added Agent!</div>';
       }else{
         echo '<div class="error-handle error-5">Error while adding!</div>';
@@ -111,9 +111,9 @@ function showtable() {
       <select name='name' id='name'>
 <?php
   $query = "SELECT user_id from staff_master where dept='agent' ";
-  $run = mysql_query($query);
+  $run = $connection->query($query);
 
-  while($row = mysql_fetch_array($run)){
+  while($row = ($run)->fetch_assoc()){
    $str = "<option>".$row['user_id']."</option>";
    echo $str;
   }

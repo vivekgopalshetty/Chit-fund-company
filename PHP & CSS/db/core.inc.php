@@ -16,8 +16,14 @@ function loggedin(){
 
 function userlevel($exp){
   global $connection;
-  $user = $_SESSION['user_id'];
-  $query = "SELECT `user_level` FROM `user_master` WHERE `user_id`='" . $connection->real_escape_string($user) . "'";
+  if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])){
+    return False;
+  }
+  $user = (string) $_SESSION['user_id'];
+  if (!isset($connection)){
+    require 'conn.inc.php';
+  }
+  $query = "SELECT `user_level` FROM `user_master` WHERE `id`='" . $connection->real_escape_string($user) . "'";
   if($query_result = $connection->query($query)){
     if($query_result->num_rows == 1){
       $row = $query_result->fetch_assoc();

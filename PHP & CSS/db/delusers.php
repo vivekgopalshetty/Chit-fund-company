@@ -78,12 +78,12 @@ function showusers() {
 
     if(!empty($user_id)){
       $query = "select user_id from user_master where user_id='$user_id'";
-      $result = mysql_query($query);
-      if(mysql_num_rows($result)!=1){
+      $result = $connection->query($query);
+      if(($result)->num_rows!=1){
         echo '<div class="error-handle error-5">Invalid User ID!</div>';
-      }else if(mysql_num_rows($result)){
+      }else if(($result)->num_rows){
        $query = "delete from user_master where user_id='$user_id'";
-       if($result = mysql_query($query)){
+       if($result = $connection->query($query)){
          echo '<div class="success-handle success-4">User Successfully Deleted!</div>';
        }
        else{

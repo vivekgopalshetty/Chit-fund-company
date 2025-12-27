@@ -129,7 +129,7 @@ td.text-right {
   }
 
   $query = "select * from subscriber_master";
-  $result = mysql_query($query);
+  $result = $connection->query($query);
 
   echo "<table class=table-fill >
   <thead>
@@ -149,7 +149,7 @@ td.text-right {
   </tr>
   </thead>";
 
-  while($row = mysql_fetch_array($result)) {
+  while($row = ($result)->fetch_assoc()) {
     echo "<tbody class=table-hover>";
     echo "<tr>";
     echo "<td class=text-left >" . $row['sub_id'] . "</td>";
@@ -166,9 +166,9 @@ td.text-right {
     $sub_id = $row['sub_id'];
 
     $query = "SELECT * from subscriber_group where sub_id='$sub_id'";
-    $r = mysql_query($query);
+    $r = $connection->query($query);
 
-    while($record = mysql_fetch_array($r)){
+    while($record = ($r)->fetch_assoc()){
       $grp_id = $record['grp_id'];
       $answer=$answer.$grp_id.", ";
     }

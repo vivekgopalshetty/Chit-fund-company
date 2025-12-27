@@ -79,71 +79,71 @@ function showtable() {
       if($flag == 'Y' || $flag == 'N'){
         $grp_id = $_SESSION['grp_id'];
         $query = "INSERT INTO `auction_master`(`grp_id`, `sub_id`, `date`, `amount`, `flag`, `minutes_of_meeting`) VALUES ('$grp_id','$sub_id','$date','$amt','$flag','$mom')";
-        if($result = mysql_query($query)){
+        if($result = $connection->query($query)){
           $query = "select * from subscriber_group where grp_id='$grp_id'";
-          $run = mysql_query($query);
+          $run = $connection->query($query);
 
-          while($row = mysql_fetch_array($run)){
+          while($row = ($run)->fetch_assoc()){
           $str = $row['sub_id'];
           $amount_paid = $row['amount_paid'];
 
           $query = "select * from group_master where grp_id='$grp_id'";
-          $result = mysql_query($query);
-          $sub_amount = mysql_result($result, 0, 'amount');
+          $result = $connection->query($query);
+          $sub_amount = result_get($result,0,'amount');
 
           if($amount_paid>=$sub_amount){
             $query = "update subscriber_group set amount_paid=amount_paid-'$sub_amount', sub_pay_status='Y' where sub_id='$str' and grp_id='$grp_id'";
-            $result = mysql_query($query);
+            $result = $connection->query($query);
           }else{
             $query = "DELETE FROM `subscriber_group` WHERE grp_id='$grp_id' AND sub_id='$str'";
-            $result = mysql_query($query);
+            $result = $connection->query($query);
 
             $query = "UPDATE group_master set no_of_subs=no_of_subs-1 where grp_id='$grp_id'";
-            $result = mysql_query($query);
+            $result = $connection->query($query);
 
             $d = date("Y-m-d");
 
             $query = "UPDATE group_member set grp_date_closed='$d', grp_active='0', defaulted='1' where grp_id='$grp_id' and sub_id='$str'";
-            $result = mysql_query($query);
+            $result = $connection->query($query);
           }
    
           }
 
 
           $query = "select * from subscriber_group where grp_id='$grp_id' and sub_id='$sub_id'";
-          $result = mysql_query($query);
+          $result = $connection->query($query);
           
-          if(mysql_num_rows($result)==0){
+          if(($result)->num_rows==0){
             echo '<div class="error-handle error-6">The Prized Subscriber has defaulted. Auction has to be reconducted!</div>';
           }else{
 
           $query = "select * from group_master where grp_id='$grp_id'";
-          $result = mysql_query($query);
-          $sub_amount = mysql_result($result, 0, 'amount');
-          $no_of_subs = mysql_result($result, 0, 'no_of_subs');
+          $result = $connection->query($query);
+          $sub_amount = result_get($result,0,'amount');
+          $no_of_subs = result_get($result,0,'no_of_subs');
 
           if($amt<$sub_amount/2){
 
           $query = "UPDATE account_master set balance=balance-'$amt' where acc_id='1'";
-          $result = mysql_query($query);
+          $result = $connection->query($query);
 
           $query = "INSERT INTO `account_ledger`(`trans_date`, `debit_credit`, `amount`, `acc_id`) VALUES ('$date','1','$amt','1')";
-          $result = mysql_query($query);
+          $result = $connection->query($query);
 
           $return = ($sub_amount*$no_of_subs)-$amt;
           $return = 0.95 * $return;
           if($return>0){
             $query = "UPDATE account_master set balance=balance-'$return' where acc_id='1'";
-            $result = mysql_query($query);
+            $result = $connection->query($query);
             $query = "INSERT INTO `account_ledger`(`trans_date`, `debit_credit`, `amount`, `acc_id`) VALUES ('$date','1','$return','1')";
-            $result = mysql_query($query);
+            $result = $connection->query($query);
             echo '<div class="success-handle success-1">Successfully Added Record!</div>';
           }
           
           }else{
             echo '<div class="error-handle error-6">Subscription Amount too high. Re-conduct Auction.</div>';
             $query = "DELETE from auction_master where grp_id='$grp_id' and sub_id='$sub_id' and date='$date'";
-            $result = mysql_query($query);
+            $result = $connection->query($query);
           }
 
         }
@@ -172,9 +172,9 @@ function showtable() {
   $grp_id = $_SESSION['grp_id'];
 
   $query = "select sub_id from subscriber_group where grp_id='$grp_id'";
-  $run = mysql_query($query);
+  $run = $connection->query($query);
 
-  while($row = mysql_fetch_array($run)){
+  while($row = ($run)->fetch_assoc()){
    $str = "<option>".$row['sub_id']."</option>";
    echo $str;
   }

@@ -63,13 +63,13 @@
     if(!empty($sub_id) && !empty($coll_id) && !empty($t_date) && !empty($cash_cheque) && !empty($amount) && !empty($grp_id) )
     {
       $query = "select agent_id from subscriber_master where sub_id='$sub_id'";
-      $query_result = mysql_query($query);
-      $agent_id = mysql_result($query_result, 0, 'agent_id');
+      $query_result = $connection->query($query);
+      $agent_id = result_get($query_result,0,'agent_id');
 
       $q = "SELECT * from subscriber_group where sub_id='$sub_id' and grp_id='$grp_id'";
-      $r = mysql_query($q);
+      $r = $connection->query($q);
 
-      if(mysql_num_rows($r)==0){
+      if(($r)->num_rows==0){
         echo '<div class="error-handle error-4">Invalid Group</div>';
       }else{
 
@@ -81,23 +81,23 @@
        }
      
 
-      if($query_result = mysql_query($query)) {
+      if($query_result = $connection->query($query)) {
         
         if($cash_cheque==2){
           $query = "INSERT INTO `cheque_master`(`chq_no`, `sub_id`, `trans_date`, `lodged_date`, `amount`, `payment_status`) VALUES ('$cheque_no','$sub_id', '$t_date','$t_date', '$amount','2' )";
-          $mysql_result = mysql_query($query);
+          $mysql_result = $connection->query($query);
 
           $query = "select trans_id from receipt_payments where chq_no='$cheque_no";
-          $query_result = mysql_query($query);
-          $trans_id = mysql_result($query_result, 0, 'trans_id');
+          $query_result = $connection->query($query);
+          $trans_id = result_get($query_result,0,'trans_id');
         }else{
           $query = "select trans_id from receipt_payments where sub_id='$sub_id' and grp_id='$grp_id' and trans_date='$t_date' and coll_id='$coll_id' and amount='$amount' and rec_cash_cheque='$cash_cheque'";
-          $query_result = mysql_query($query);
-          $trans_id = mysql_result($query_result, 0, 'trans_id'); 
+          $query_result = $connection->query($query);
+          $trans_id = result_get($query_result,0,'trans_id'); 
         }
 
         $query = "INSERT INTO `subscriber_ledger`(`trans_id`, `sub_id`, `trans_date`, `amount`) VALUES ('$trans_id', '$sub_id', '$t_date', '$amount')";
-        $query_result = mysql_query($query);
+        $query_result = $connection->query($query);
 
 
         if($cash_cheque!=2){
@@ -109,7 +109,7 @@
 
         $query1 = "INSERT INTO `account_ledger`(`trans_date`, `debit_credit`, `amount`, `acc_id`) VALUES ('$date', '$debit', '$amount', '$acc_id')";
         
-        if($result1 = mysql_query($query1) && $result2 = mysql_query($query2) && $query_result = mysql_query($query)){
+        if($result1 = $connection->query($query1) && $result2 = $connection->query($query2) && $query_result = $connection->query($query)){
            echo '<div class="success-handle success-1">Successfully Added Transaction!</div>';
         }else{
            echo '<div class="error-handle error-4">Error While Adding!</div>';
@@ -146,8 +146,8 @@
       <select name='sub_id' id='sub_id'>
       <?php 
       $query = "select sub_id from subscriber_master";
-      $query_result = mysql_query($query);
-      while($row = mysql_fetch_array($query_result)){
+      $query_result = $connection->query($query);
+      while($row = ($query_result)->fetch_assoc()){
         $str = "<option>".$row['sub_id']."</option>";
         echo $str;
         }
@@ -162,8 +162,8 @@
       <select name='coll_id' id='coll_id'>
       <?php 
       $query = "select coll_id from collector_master";
-      $query_result = mysql_query($query);
-      while($row = mysql_fetch_array($query_result)){
+      $query_result = $connection->query($query);
+      while($row = ($query_result)->fetch_assoc()){
         $str = "<option>".$row['coll_id']."</option>";
         echo $str;
         }
@@ -178,8 +178,8 @@
       <select name='grp_id' id='grp_id'>
       <?php 
       $query = "select grp_id from group_master";
-      $query_result = mysql_query($query);
-      while($row = mysql_fetch_array($query_result)){
+      $query_result = $connection->query($query);
+      while($row = ($query_result)->fetch_assoc()){
         $str = "<option>".$row['grp_id']."</option>";
         echo $str;
         }

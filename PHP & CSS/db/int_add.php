@@ -50,12 +50,12 @@
 
     if(!empty($acc_name) && !empty($acc_no)){
       $query = "SELECT acc_id from account_master where acc_id='$acc_no'";
-      $result = mysql_query($query);
+      $result = $connection->query($query);
 
-      if(!mysql_num_rows($result))
+      if(!($result)->num_rows)
       {  
         $query = "INSERT INTO `account_master`(`acc_id`, `acc_name`) VALUES ('$acc_no', '$acc_name')";
-        if($result = mysql_query($query)){
+        if($result = $connection->query($query)){
           echo '<div class="success-handle success-4">Successfully added account!</div>';
         }else{
           echo '<div class="error-handle error-4">Error while adding account!</div>';

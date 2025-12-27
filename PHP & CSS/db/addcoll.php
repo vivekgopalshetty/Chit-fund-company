@@ -75,26 +75,26 @@ function showtable() {
     if(!empty($id) && !empty($addr) && !empty($grp_id)){
 
       $query = "SELECT * from staff_master where user_id='$id'";
-      $result = mysql_query($query);
-      $name = mysql_result($result, 0, 'staff_name'); 
-      $dob = mysql_result($result, 0, 'date_of_birth'); 
-      $sex = mysql_result($result, 0, 'sex'); 
+      $result = $connection->query($query);
+      $name = result_get($result,0,'staff_name'); 
+      $dob = result_get($result,0,'date_of_birth'); 
+      $sex = result_get($result,0,'sex'); 
 
       $query = "SELECT * from collector_master where name='$name' and address='$addr' and date_of_birth='$dob'";
-      $result = mysql_query($query);
+      $result = $connection->query($query);
 
-      if(mysql_num_rows($result)>=1){
+      if(($result)->num_rows>=1){
         echo '<div class="error-handle error-4">Collector Already Exists</div>';
       }else{
 
       $query = "INSERT INTO `collector_master`( `name`, `address`, `sex`, `date_of_birth`, `coll_active`) VALUES ('$name', '$addr', '$sex', '$dob', '1')";
-      if($result = mysql_query($query)){
+      if($result = $connection->query($query)){
         $q = "SELECT * from collector_master where name='$name' and address='$addr' and date_of_birth='$dob'";
-        $result = mysql_query($q);
-        $coll_id = mysql_result($result, 0, 'coll_id');
+        $result = $connection->query($q);
+        $coll_id = result_get($result,0,'coll_id');
 
         $query = "INSERT INTO `collector_group`(`coll_id`, `grp_id`) VALUES ('$coll_id', '$grp_id')";
-        if($result = mysql_query($query)){
+        if($result = $connection->query($query)){
           echo '<div class="success-handle success-4">Successfully Added Collector!</div>';
         }
         else{
@@ -122,9 +122,9 @@ function showtable() {
        <select name='name' id='name'>
 <?php
   $query = "SELECT user_id from staff_master where dept='collector' ";
-  $run = mysql_query($query);
+  $run = $connection->query($query);
 
-  while($row = mysql_fetch_array($run)){
+  while($row = ($run)->fetch_assoc()){
    $str = "<option>".$row['user_id']."</option>";
    echo $str;
   }
@@ -141,9 +141,9 @@ function showtable() {
 
 <?php
   $query = "SELECT grp_id from group_master";
-  $run = mysql_query($query);
+  $run = $connection->query($query);
 
-  while($row = mysql_fetch_array($run)){
+  while($row = ($run)->fetch_assoc()){
    $str = "<option>".$row['grp_id']."</option>";
    echo $str;
   }

@@ -58,7 +58,7 @@
 
     if(!empty($name) && !empty($dob) && !empty($sex)){
       $query = "INSERT INTO `staff_master`(`staff_name`, `date_of_birth`, `sex`, `dept`) VALUES ('$name', '$dob', '$sex', '$dept')";
-      if($query_result = mysql_query($query)){
+      if($query_result = $connection->query($query)){
         echo '<div class="success-handle success-1">Successfully Added!</div>';
       }
       else{

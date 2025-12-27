@@ -53,7 +53,7 @@
     if(!empty($amt) && !empty($freq)){
       $no_of_subs = 0;
       $query = "INSERT INTO `group_master`(`no_of_subs`, `amount`, `frequency`) VALUES ('$no_of_subs', '$amt', '$freq')";
-      if($query_result = mysql_query($query)){
+      if($query_result = $connection->query($query)){
         echo '<div class="success-handle success-1">Successfully Added!</div>';
       }
       else{

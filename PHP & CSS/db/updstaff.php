@@ -95,13 +95,13 @@ function showstaff() {
     $flag=0;
     if(!empty($user_id)){
       $query = "select user_id from staff_master where user_id='$user_id'";
-      $result = mysql_query($query);
-      if(mysql_num_rows($result)!=1){
+      $result = $connection->query($query);
+      if(($result)->num_rows!=1){
         echo '<div class="error-handle error-3">Invalid User ID!</div>';
-      }else if(mysql_num_rows($result)){
+      }else if(($result)->num_rows){
         if(!empty($name)){
           $query = "update staff_master set staff_name='$name' where user_id='$user_id'";
-          if($result = mysql_query($query)){
+          if($result = $connection->query($query)){
             $temp=0;
           }else{
             $flag=1;
@@ -109,7 +109,7 @@ function showstaff() {
         }
         if(!empty($dob)){
           $query = "update staff_master set date_of_birth='$dob' where user_id='$user_id'";
-          if($result = mysql_query($query)){
+          if($result = $connection->query($query)){
             $temp=0;
           }else{
             $flag=1;
@@ -117,7 +117,7 @@ function showstaff() {
         }
         if(!empty($sex)){
           $query = "update staff_master set sex='$sex' where user_id='$user_id'";
-          if($result = mysql_query($query)){
+          if($result = $connection->query($query)){
             $temp=0;
           }else{
             $flag=1;
@@ -125,16 +125,16 @@ function showstaff() {
         }
         if(!empty($dept)){
           $query = "update staff_master set dept='$dept' where user_id='$user_id'";
-          if($result = mysql_query($query)){
+          if($result = $connection->query($query)){
             $temp=0;
           }else{
             $flag=1;
           }
           $query = "select user_id from user_master where user_id='$user_id'";
-          if($result = mysql_query($query)){
-            if(mysql_num_rows($result)){
+          if($result = $connection->query($query)){
+            if(($result)->num_rows){
               $query = "update user_master set dept='$dept' where user_id='$user_id'";
-              $result = mysql_query($query);
+              $result = $connection->query($query);
             }
           }else{
 

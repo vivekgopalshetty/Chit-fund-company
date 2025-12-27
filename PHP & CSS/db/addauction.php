@@ -61,7 +61,7 @@ function showtable() {
 
 <?php
   $query = "select grp_id from group_master";
-  $run = mysql_query($query);
+  $run = $connection->query($query);
 
   echo "<h4>Select the group for which the auction was conducted</h4>";
 ?>
@@ -72,7 +72,7 @@ function showtable() {
 
   echo "<label>Group ID</label> <select name='grp_id' id='grp_id'> ";
 
-  while($row = mysql_fetch_array($run)){
+  while($row = ($run)->fetch_assoc()){
    $str = "<option>".$row['grp_id']."</option>";
    echo $str;
   }

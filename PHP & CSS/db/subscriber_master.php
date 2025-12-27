@@ -131,7 +131,7 @@ td.text-right {
   $grp_id = $_SESSION['grp_id'];
 
   $query = "select sub_id from subscriber_group where grp_id='$grp_id'";
-  $result = mysql_query($query);
+  $result = $connection->query($query);
 
   echo "<table  class=table-fill >
   <thead>
@@ -144,18 +144,18 @@ td.text-right {
   </tr>
   </thead>";
 
-  while($row = mysql_fetch_array($result)) {
+  while($row = ($result)->fetch_assoc()) {
     echo "<tbody class=table-hover>";
     echo "<tr>";
     echo "<td class=text-left >" . $row['sub_id'] . "</td>";
     $sub_id = $row['sub_id'];
     $q = "select * from subscriber_master where sub_id='$sub_id'";
-    $r = mysql_query($q);
+    $r = $connection->query($q);
 
-    $name = mysql_result($r, 0, 'name');
-    $occ = mysql_result($r, 0, 'occupation');
-    $email = mysql_result($r, 0, 'email');
-    $agent_id = mysql_result($r, 0, 'agent_id');
+    $name = result_get($r,0,'name');
+    $occ = result_get($r,0,'occupation');
+    $email = result_get($r,0,'email');
+    $agent_id = result_get($r,0,'agent_id');
 
     echo "<td class=text-left >" . $name . "</td>";
     echo "<td class=text-left >" . $occ . "</td>";

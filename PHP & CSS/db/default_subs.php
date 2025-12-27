@@ -130,7 +130,7 @@ td.text-right {
   }
 
   $query = "select * from group_member where defaulted='1'";
-  $result = mysql_query($query);
+  $result = $connection->query($query);
 
   echo "<table class=table-fill >
   <thead>
@@ -145,17 +145,17 @@ td.text-right {
   </tr>
   </thead>";
 
-  while($row = mysql_fetch_array($result)) {
+  while($row = ($result)->fetch_assoc()) {
     echo "<tbody class=table-hover>";
     echo "<tr>";
     echo "<td class=text-left >" . $row['sub_id'] . "</td>";
     $sub_id = $row['sub_id'];
 
-    $r = mysql_query("SELECT * from subscriber_master where sub_id='$sub_id'");
-    $name = mysql_result($r, 0, 'name');
-    $nom_name = mysql_result($r, 0, 'nom_name');
-    $mobile = mysql_result($r, 0, 'mobile');
-    $address = mysql_result($r, 0, 'address');
+    $r = $connection->query("SELECT * from subscriber_master where sub_id='$sub_id'");
+    $name = result_get($r,0,'name');
+    $nom_name = result_get($r,0,'nom_name');
+    $mobile = result_get($r,0,'mobile');
+    $address = result_get($r,0,'address');
 
     echo "<td class=text-left >" . $name . "</td>";
     echo "<td class=text-left >" . $mobile . "</td>";

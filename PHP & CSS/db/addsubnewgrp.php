@@ -77,20 +77,20 @@ function show_sub() {
       $dat = date("Y-m-d");
 
       $query = "select * from group_member where grp_id='$grp_id' and sub_id='$sub_id' and grp_active='1'";
-      $query_result = mysql_query($query);
+      $query_result = $connection->query($query);
 
-      if(mysql_num_rows($query_result)==0){
+      if(($query_result)->num_rows==0){
 
       $query = " INSERT INTO `group_member`(`grp_id`, `sub_id`, `grp_active`, `grp_date_open`, `grp_date_closed`) VALUES ('$grp_id','$sub_id', '1', '$dat', 'NULL')";
 
-      if($query_result = mysql_query($query)){
+      if($query_result = $connection->query($query)){
         echo '<div class="success-handle success-1">Successfully Added!</div>';
         
         $query = "INSERT INTO `subscriber_group`(`sub_id`, `grp_id`, `sub_pay_status`) VALUES ('$sub_id', '$grp_id', 'Y')";
-        $query_result = mysql_query($query);
+        $query_result = $connection->query($query);
 
         $query = "UPDATE group_master set no_of_subs=no_of_subs+1 where grp_id='$grp_id'";
-        $query_result = mysql_query($query);
+        $query_result = $connection->query($query);
 
       }
       else{
@@ -120,8 +120,8 @@ function show_sub() {
         <select name='sub_id' id='sub_id'>
       <?php 
       $query = "select sub_id from subscriber_master";
-      $query_result = mysql_query($query);
-      while($row = mysql_fetch_array($query_result)){
+      $query_result = $connection->query($query);
+      while($row = ($query_result)->fetch_assoc()){
         $str = "<option>".$row['sub_id']."</option>";
         echo $str;
         }
@@ -136,8 +136,8 @@ function show_sub() {
         <select name='grp_id' id='grp_id'>
       <?php 
       $query = "select grp_id from group_master";
-      $query_result = mysql_query($query);
-      while($row = mysql_fetch_array($query_result)){
+      $query_result = $connection->query($query);
+      while($row = ($query_result)->fetch_assoc()){
         $str = "<option>".$row['grp_id']."</option>";
         echo $str;
         }

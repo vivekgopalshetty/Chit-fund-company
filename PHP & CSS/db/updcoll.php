@@ -81,7 +81,7 @@ function showusers() {
       }
 
       $query = "UPDATE collector_master set coll_active='$coll_status', date_inactive='$date_inactive' where coll_id='$coll_id'";
-      if($result = mysql_query($query)){
+      if($result = $connection->query($query)){
         echo '<div class="success-handle success-1">Successfully Updated!</div>';
       }else{
         echo '<div class="error-handle error-5">Error!</div>';
@@ -100,9 +100,9 @@ function showusers() {
       <select name='coll_id' id='coll_id'>
   <?php
   $query = "SELECT coll_id from collector_master";
-  $run = mysql_query($query);
+  $run = $connection->query($query);
 
-  while($row = mysql_fetch_array($run)){
+  while($row = ($run)->fetch_assoc()){
    $str = "<option>".$row['coll_id']."</option>";
    echo $str;
   }

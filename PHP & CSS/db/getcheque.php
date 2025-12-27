@@ -131,7 +131,7 @@ td.text-right {
   }
 
   $query = "select * from cheque_master";
-  $result = mysql_query($query);
+  $result = $connection->query($query);
 
   echo "<table class=table-fill>
   <thead>
@@ -146,7 +146,7 @@ td.text-right {
   </thead>
   ";
 
-  while($row = mysql_fetch_array($result)) {
+  while($row = ($result)->fetch_assoc()) {
     echo "<tbody class=table-hover>";
     echo "<tr>";
     echo "<td class=text-left >" . $row['chq_no'] . "</td>";

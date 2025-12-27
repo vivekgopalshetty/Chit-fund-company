@@ -81,14 +81,14 @@ function showstaff() {
 
     if(!empty($user_id) && !empty($user_level) && !empty($password)){
       $q = "select * from user_master where user_id='$user_id'";
-      if($run=mysql_query($q)){
-        if(mysql_num_rows($run)){
+      if($run=$connection->query($q)){
+        if(($run)->num_rows){
           echo '<div class="error-handle error-3">User Already Exists!</div>';
         }
-        else if(!mysql_num_rows($run)){
+        else if(!($run)->num_rows){
           $query = "select * from staff_master where user_id='$user_id'";
-          if($result=mysql_query($query)){
-            if(mysql_num_rows($result)!=1){
+          if($result=$connection->query($query)){
+            if(($result)->num_rows!=1){
               echo '<div class="error-handle error-3">Invalid User ID</div>';
             }
             else{
@@ -97,10 +97,10 @@ function showstaff() {
                 echo 'Invalid User Access Level. Try Again!';
               }
               else{
-                $name = mysql_result($result, 0, 'staff_name');
-                $dept = mysql_result($result, 0, 'dept');
+                $name = result_get($result,0,'staff_name');
+                $dept = result_get($result,0,'dept');
                 $query = "INSERT INTO `user_master`(`user_id`, `user_password`, `user_level`, `name`, `dept`) VALUES ('$user_id','$pass_hash','$user_level','$name','$dept')";
-                if($result=mysql_query($query)){
+                if($result=$connection->query($query)){
                   echo '<div class="success-handle success-4">User Added Successfully!</div>';
                 }
                 else{

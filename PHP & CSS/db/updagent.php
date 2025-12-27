@@ -78,7 +78,7 @@ function showusers() {
       }
 
       $query = "UPDATE agent_master set agent_active='$agent_status', date_inactive='$date_inactive' where agent_id='$agent_id'";
-      if($result = mysql_query($query)){
+      if($result = $connection->query($query)){
         echo '<div class="success-handle success-1">Successfully Updated!</div>';
       }else{
         echo '<div class="error-handle error-5">Error!</div>';
@@ -98,9 +98,9 @@ function showusers() {
       <select name='agent_id' id='agent_id'>
   <?php
   $query = "SELECT agent_id from agent_master";
-  $run = mysql_query($query);
+  $run = $connection->query($query);
 
-  while($row = mysql_fetch_array($run)){
+  while($row = ($run)->fetch_assoc()){
    $str = "<option>".$row['agent_id']."</option>";
    echo $str;
   }

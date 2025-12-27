@@ -55,20 +55,20 @@
 
     if(!empty($date) && !empty($acc_name) && !empty($debit) && !empty($amount)){
       $query = "SELECT acc_id from account_master where acc_name='$acc_name'";
-      $result = mysql_query($query);
-      $acc_id = mysql_result($result, 0, 'acc_id');
+      $result = $connection->query($query);
+      $acc_id = result_get($result,0,'acc_id');
       
       if($debit==1){
           $query = "SELECT balance from account_master where acc_id='$acc_id'";
-          $result = mysql_query($query);
-          $balance = mysql_result($result, 0, 'balance');
+          $result = $connection->query($query);
+          $balance = result_get($result,0,'balance');
 
           if($balance-$amount >= 0){
             $query1 = "INSERT INTO `account_ledger`(`trans_date`, `debit_credit`, `amount`, `acc_id`) VALUES ('$date', '$debit', '$amount', '$acc_id')";
             $query2 = "UPDATE account_master set balance=balance-'$amount' where acc_id='$acc_id'";
             
 
-            if($result1 = mysql_query($query1) && $result2 = mysql_query($query2)){
+            if($result1 = $connection->query($query1) && $result2 = $connection->query($query2)){
               echo '<div class="success-handle success-4">Successfully Added Transaction!</div>';
             }else{
               echo '<div class="error-handle error-5">Error While Adding!</div>';
@@ -81,7 +81,7 @@
           $query2 = "UPDATE account_master set balance=balance+'$amount' where acc_id='$acc_id'";
           $query1 = "INSERT INTO `account_ledger`(`trans_date`, `debit_credit`, `amount`, `acc_id`) VALUES ('$date', '$debit', '$amount', '$acc_id')";
           
-          if($result1 = mysql_query($query1) && $result2 = mysql_query($query2)){
+          if($result1 = $connection->query($query1) && $result2 = $connection->query($query2)){
               echo '<div class="success-handle success-4">Successfully Added Transaction!</div>';
             }else{
               echo '<div class="error-handle error-5">Error While Adding!</div>';
@@ -126,11 +126,11 @@
     <div class="col-sm-4">
         <?php
       $query = "SELECT acc_name from account_master";
-      $run = mysql_query($query);
+      $run = $connection->query($query);
 
       echo "<select name='acc_name' id='acc_name'> ";
 
-      while($row = mysql_fetch_array($run)){
+      while($row = ($run)->fetch_assoc()){
         $str = "<option>".$row['acc_name']."</option>";
         echo $str;
         }

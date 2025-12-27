@@ -88,20 +88,20 @@ function showcheque() {
 
         $query = "update cheque_master set payment_status='$pay_stat', settle_date='$settle_date' where chq_no='$chq_no'";
 
-        if($query_result = mysql_query($query)){
+        if($query_result = $connection->query($query)){
           
           if($pay_stat==1){
             $query = "select sub_id from cheque_master where chq_no='$chq_no'";
-            $query_result = mysql_query($query);
-            $sub_id = mysql_result($query_result, 0, 'sub_id');
+            $query_result = $connection->query($query);
+            $sub_id = result_get($query_result,0,'sub_id');
 
             $query = "select * from receipt_payments where chq_no='$chq_no'";    
-            $query_result = mysql_query($query);
-            $grp_id = mysql_result($query_result, 0, 'grp_id');
-            $amount = mysql_result($query_result, 0, 'amount');            
+            $query_result = $connection->query($query);
+            $grp_id = result_get($query_result,0,'grp_id');
+            $amount = result_get($query_result,0,'amount');            
 
             $query = "UPDATE subscriber_group set amount_paid=amount_paid+'$amount' where sub_id='$sub_id' and grp_id='$grp_id'";
-            $query_result = mysql_query($query);
+            $query_result = $connection->query($query);
 
             $query2 = "UPDATE account_master set balance=balance+'$amount' where acc_id='1'";
             $date = date("Y-m-d");
@@ -110,7 +110,7 @@ function showcheque() {
 
             $query1 = "INSERT INTO `account_ledger`(`trans_date`, `debit_credit`, `amount`, `acc_id`) VALUES ('$date', '$debit', '$amount', '$acc_id')";
         
-            if($result1 = mysql_query($query1) && $result2 = mysql_query($query2) && $query_result = mysql_query($query)){
+            if($result1 = $connection->query($query1) && $result2 = $connection->query($query2) && $query_result = $connection->query($query)){
               echo '<div class="success-handle success-1">Successfully Updated!</div>';
             }else{
               echo '<div class="error-handle error-4">Error While Adding!</div>';

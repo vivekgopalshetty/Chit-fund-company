@@ -135,7 +135,7 @@ td.text-right {
   }
 
   $query = "select * from user_master";
-  $result = mysql_query($query);
+  $result = $connection->query($query);
 
   echo "<table border='1' class=table-fill >
   <thead>
@@ -148,7 +148,7 @@ td.text-right {
   </thead>
   ";
 
-  while($row = mysql_fetch_array($result)) {
+  while($row = ($result)->fetch_assoc()) {
     echo "<tbody class=table-hover>";
     echo "<tr>";
     echo "<td class=text-left >" . $row['user_id'] . "</td>";

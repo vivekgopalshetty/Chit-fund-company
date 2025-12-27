@@ -83,8 +83,8 @@ function showusers() {
 
     if(!empty($user_id) && !empty($user_level)){
       $query = "select user_id from user_master where user_id='$user_id'";
-      if($result = mysql_query($query)){
-        if(mysql_num_rows($result)!=1){
+      if($result = $connection->query($query)){
+        if(($result)->num_rows!=1){
           echo '<div class="error-handle error-5">Invalid User ID</div>';
         }
         else{
@@ -93,7 +93,7 @@ function showusers() {
           }
           else{
             $query = "update user_master set user_level='$user_level' where user_id='$user_id'";
-            if($result = mysql_query($query)){
+            if($result = $connection->query($query)){
               echo '<div class="success-handle success-2">Successfully Updated Access level!</div>';
             }
             else{

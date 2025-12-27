@@ -59,25 +59,25 @@
     if(!empty($name) && !empty($addr) && !empty($sex) && !empty($agent_id) && !empty($dob) && !empty($nom_name) && !empty($nom_addr) && !empty($mob) && !empty($grp_id) && !empty($occu) && !empty($email))
     {
       $query = "INSERT INTO `subscriber_master`(`name`, `sex`, `address`, `date_of_birth`, `agent_id`, `occupation`, `mobile`, `email`, `nom_name`, `nom_addr`) VALUES ('$name','$sex','$addr','$dob','$agent_id','$occu','$mob','$email','$nom_name','$nom_addr')";
-      if($query_result = mysql_query($query)){
+      if($query_result = $connection->query($query)){
         echo '<div class="success-handle success-1">Successfully Added!</div>';
         
         $dat = date("Y-m-d");
         
         $q = "select sub_id from subscriber_master where email='$email'";
-        $r = mysql_query($q);
-        $sub_id = mysql_result($r, 0, 'sub_id');
+        $r = $connection->query($q);
+        $sub_id = result_get($r,0,'sub_id');
         
         $query = " INSERT INTO `group_member`(`grp_id`, `sub_id`, `grp_active`, `grp_date_open`, `grp_date_closed`) VALUES ('$grp_id','$sub_id', '1', '$dat', 'NULL')";
 
-        $query_result = mysql_query($query);
+        $query_result = $connection->query($query);
 
         $amount_paid = 0;
         $query = "INSERT INTO `subscriber_group`(`sub_id`, `grp_id`, `sub_pay_status`, `amount_paid`) VALUES ('$sub_id', '$grp_id', 'N', '$amount_paid')";
-        $query_result = mysql_query($query);
+        $query_result = $connection->query($query);
 
         $query = "UPDATE group_master set no_of_subs=no_of_subs+1 where grp_id='$grp_id'";
-        $query_result = mysql_query($query);
+        $query_result = $connection->query($query);
 
       }
       else{
@@ -128,8 +128,8 @@
       <select name='agent_id' id='agent_id'>
       <?php 
       $query = "select agent_id, name from agent_master";
-      $query_result = mysql_query($query);
-      while($row = mysql_fetch_array($query_result)){
+      $query_result = $connection->query($query);
+      while($row = ($query_result)->fetch_assoc()){
         $str = "<option>".$row['agent_id']."</option>";
         echo $str;
         }
@@ -144,8 +144,8 @@
       <select name='grp_id' id='grp_id'>
       <?php 
       $query = "select grp_id from group_master";
-      $query_result = mysql_query($query);
-      while($row = mysql_fetch_array($query_result)){
+      $query_result = $connection->query($query);
+      while($row = ($query_result)->fetch_assoc()){
         $str = "<option>".$row['grp_id']."</option>";
         echo $str;
         }
