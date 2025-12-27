@@ -2,17 +2,16 @@
 
 $host = "localhost";
 $user = "root";
-$pass = '';
+$pass = 'root';  // Change from empty to 'root'
+$db = "chit_fund_company";
 
 $error_msg = "Sorry, Couldn't connect to MySQL DB";
 
-$db = "chit_fund_company";
+// Use MySQLi instead of deprecated mysql_connect
+$connection = @mysqli_connect($host, $user, $pass, $db);
 
-if (!@mysql_connect($host, $user, $pass) || !@mysql_select_db($db) ){
+if (!$connection) {
   die($error_msg);
 }
-  
 
 ?>
-
-
